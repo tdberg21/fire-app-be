@@ -8,8 +8,8 @@ const database = require('knex')(configuration);
 app.locals.title = 'Fire Tracker';
 app.set('port', process.env.PORT || 3001);
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((request, response, next) => {
   response.header('Access-Control-Allow-Origin', '*')
