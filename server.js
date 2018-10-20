@@ -8,7 +8,7 @@ const database = require('knex')(configuration);
 app.locals.title = 'Fire Tracker';
 app.set('port', process.env.PORT || 3001);
 
-app.use(bodyParser.json());
+app.use(bodyPbarser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((request, response, next) => {
