@@ -7,6 +7,7 @@ const database = require('knex')(configuration);
 
 app.locals.title = 'Fire Tracker';
 app.set('port', process.env.PORT || 3001);
+// require('dotenv').config();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -16,9 +17,19 @@ app.use((request, response, next) => {
   next()
 });
 
-app.use((request, response, next) => {
-  response.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
-  next()
+// app.use((request, response, next) => {
+//   response.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+//   next()
+// });
+
+app.get('/api/v1/wildfires/all', (request, response) => {
+  database('wildfires').select()
+    .then((fire) => {
+      response.status(200).json(fire);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
 });
 
 app.post('/api/v1/wildfires/new', (request, response) => {
@@ -30,9 +41,8 @@ app.post('/api/v1/wildfires/new', (request, response) => {
         .send({ error: `You're missing a "${requiredParameter}" property.` });
     }
   }
-
-  database('wildfires').insert(user, 'id')
-    .then(user => {
+  database('wildfires').insert(fire, 'id')
+    .then(fire => {
       response.status(201).json({ id: fire[0] })
     })
     .catch(error => {
@@ -40,15 +50,7 @@ app.post('/api/v1/wildfires/new', (request, response) => {
     });
 });
 
-app.get('/api/v1/wildfires', (request, response) => {
-  database('wildfires').select()
-    .then((user) => {
-      response.status(200).json(user);
-    })
-    .catch((error) => {
-      response.status(500).json({ error });
-    });
-});
+
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
